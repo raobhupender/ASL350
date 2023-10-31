@@ -1,0 +1,15 @@
+temp = ncread('SODA_TEMP.nc','TEMP');
+sal = ncread('SODA_SAL.nc','SALT');
+depth = ncread('SODA_TEMP.nc','LEV1_20');
+
+figure;
+plot(squeeze(temp(4,4,1,:)));
+title('Plot of Variation of 12 Months Temperature for 140 years');
+ylabel('Temperature (°C)');
+xlabel('Year');
+
+figure;
+plot(squeeze(sal(4,4,1,:)));
+title('Plot of Variation of 12 Months Salinity for 140 years');
+ylabel('Salinity (g/L)');
+xlabel('Year');
