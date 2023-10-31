@@ -30,7 +30,7 @@ years = 1871:2010;
 
 figure;   %Variation of Interannual Salinity (SSS)
 
-plot(years,temper,'-o');
+plot(years,salint,'-o');
 title('Plot of Variation of Interannual Salinity for 140 years');
 xlabel('Year');
 ylabel('Salinity (g/L)');
