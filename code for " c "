@@ -1,0 +1,107 @@
+lon = ncread('SODA_TEMP.nc','LON167_174');
+lat = ncread('SODA_TEMP.nc','LAT178_185');
+temp = ncread('SODA_TEMP.nc','TEMP');
+depth = ncread('SODA_TEMP.nc','LEV1_20');
+
+lon1 = ncread('SODA_SAL.nc','LON167_174');
+lat1 = ncread('SODA_SAL.nc','LAT178_185');
+sal = ncread('SODA_SAL.nc','SALT');
+depth1 = ncread('SODA_SAL.nc','LEV1_20');
+
+plot(squeeze(temp(4,4,1,:)));
+plot(squeeze(sal(4,4,1,:)));
+
+season1 = [];
+season2 = [];
+temper = [];  
+t = 0;
+t1 = 0;
+for i = 1:1680
+    value = 0;
+    for j = 1:8
+        value = value + mean(temp(:,j,1,i));
+    end
+    if rem(i,12) == 2 || rem(i,12) ==3 || rem(i,12) ==4
+        if rem(i,12)==2 && i~=2
+            season1 = [season1,t/24];
+            t=0;
+        end
+        t=t+value;
+    elseif rem(i,12) == 10 || rem(i,12) == 11 || rem(i,12)==0
+            if rem(i,12)==10 && i~=10
+                season2 = [season2,t1/24];
+                t1=0;
+            end
+            t1=t1+value;
+    end
+end
+season1 = [season1,t/24];
+season2 = [season2,t1/24];
+season11 = [];
+season22 = [];
+t = 0;
+t1 = 0;
+for i = 1:1680
+    value1 = 0;
+    for j = 1:8
+        value1 = value1 + mean(sal(:,j,1,i));
+    end   
+    if rem(i,12) == 2 || rem(i,12) ==3 || rem(i,12)==4
+        if rem(i,12)==2 && i~=2
+            season11 = [season11,t/24];
+            t=0;
+        end
+        t=t+value1; 
+    elseif rem(i,12) == 10 || rem(i,12) == 11 || rem(i,12)==0
+            if rem(i,12)==10 && i~=10
+                season22 = [season22,t1/24];
+                t1=0;
+            end
+            t1=t1+value1;
+    end
+end
+season11 = [season11,t/24];
+season22 = [season22,t1/24];
+
+season = {'1871', '1881','1891','1901','1911','1921','1931','1941','1951','1961','1971','1981','1991','2001','2010'};
+values2 = [season2(1),season2(11),season2(21),season2(31),season2(41),season2(51),season2(61),season2(71),season2(81),season2(91),season2(101),season2(111),season2(121),season2(131),season2(140)];
+values1 = [season1(1),season1(11),season1(21),season1(31),season1(41),season1(51),season1(61),season1(71),season1(81),season1(91),season1(101),season1(111),season1(121),season1(131),season1(140)];
+% Create a grouped bar graph
+bar_width = 0.35;  % Adjust the bar width as needed
+bar_groups = 1:length(season);
+
+figure;
+bar(bar_groups - bar_width/2, values1, bar_width, 'b', 'DisplayName', 'Feb-April');
+hold on;
+bar(bar_groups + bar_width/2, values2, bar_width, 'g', 'DisplayName', 'Oct-Dec');
+hold off;
+
+% Customize the chart
+title('Variations of Temperature (Feb-April vs Oct-Dec)');
+xlabel('Year');
+ylabel('Average Temperature');
+xticks(bar_groups);
+xticklabels(season);
+xtickangle(45);  % Rotate X-axis labels for readability
+legend;
+
+values22 = [season22(1),season22(11),season22(21),season22(31),season22(41),season22(51),season22(61),season22(71),season22(81),season22(91),season22(101),season22(111),season22(121),season22(131),season22(140)];
+values11 = [season11(1),season11(11),season11(21),season11(31),season11(41),season11(51),season11(61),season11(71),season11(81),season11(91),season11(101),season11(111),season11(121),season11(131),season11(140)];
+% Create a grouped bar graph
+bar_width = 0.35;  % Adjust the bar width as needed
+bar_groups = 1:length(season);
+
+figure;
+bar(bar_groups - bar_width/2, values11, bar_width, 'yellow', 'DisplayName', 'Feb-April');
+hold on;
+bar(bar_groups + bar_width/2, values22, bar_width, 'red', 'DisplayName', 'Oct-Dec');
+hold off;
+
+% Customize the chart
+title('Variations of Salinity (Feb-April vs Oct-Dec)');
+xlabel('Year');
+ylabel('Average Salinity');
+xticks(bar_groups);
+xticklabels(season);
+xtickangle(45);  % Rotate X-axis labels for readability
+legend;
