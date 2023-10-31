@@ -1,3 +1,15 @@
+lon = ncread('SODA_TEMP.nc','LON167_174');
+lat = ncread('SODA_TEMP.nc','LAT178_185');
+temp = ncread('SODA_TEMP.nc','TEMP');
+depth = ncread('SODA_TEMP.nc','LEV1_20');
+
+lon1 = ncread('SODA_SAL.nc','LON167_174');
+lat1 = ncread('SODA_SAL.nc','LAT178_185');
+sal = ncread('SODA_SAL.nc','SALT');
+depth1 = ncread('SODA_SAL.nc','LEV1_20');
+
+
+% (d)
 sigma1=[];
 sigma2=[];
 sigma11=[];
