@@ -1,0 +1,83 @@
+sigma1=[];
+sigma2=[];
+sigma11=[];
+sigma22=[];
+for d=1:20
+    season1 = [];
+    season2 = [];
+    temper = [];  
+    t = 0;
+    t1 = 0;
+    for i = 1:1680
+        value = 0;
+        for j = 1:8
+            value = value + mean(temp(:,j,d,i));
+        end
+        if rem(i,12) == 2 || rem(i,12) ==3 || rem(i,12) ==4
+            if rem(i,12)==2 && i~=2
+                season1 = [season1,t/24];
+                t=0;
+            end
+            t=t+value;
+        elseif rem(i,12) == 10 || rem(i,12) == 11 || rem(i,12)==0
+                if rem(i,12)==10 && i~=10
+                    season2 = [season2,t1/24];
+                    t1=0;
+                end
+                t1=t1+value;
+        end
+    end
+    season1 = [season1,t/24];
+    season2 = [season2,t1/24];
+    sigma1=[sigma1,std(season1)];
+    sigma2=[sigma2,std(season2)];
+    season11 = [];
+    season22 = [];
+    t = 0;
+    t1 = 0;
+    for i = 1:1680
+        value1 = 0;
+        for j = 1:8
+            value1 = value1 + mean(sal(:,j,d,i));
+        end   
+        if rem(i,12) == 2 || rem(i,12) ==3 || rem(i,12)==4
+            if rem(i,12)==2 && i~=2
+                season11 = [season11,t/24];
+                t=0;
+            end
+            t=t+value1; 
+        elseif rem(i,12) == 10 || rem(i,12) == 11 || rem(i,12)==0
+                if rem(i,12)==10 && i~=10
+                    season22 = [season22,t1/24];
+                    t1=0;
+                end
+                t1=t1+value1;
+        end
+    end
+    season11 = [season11,t/24];
+    season22 = [season22,t1/24]; %#ok<*AGROW>
+    sigma11=[sigma11,std(season11)];
+    sigma22=[sigma22,std(season22)];
+end
+
+figure;
+plot(squeeze(sigma1),'DisplayName','Temperature')
+hold on
+plot(squeeze(sigma11),'DisplayName','Salinity');
+title('Std. Dev. of Temperature and Salinity vs Depth (Feb-April)')
+xlabel('Depth');
+ylabel('Standard Deviation');
+xticks(1:20);
+xticklabels(depth);
+legend;
+
+figure;
+plot(squeeze(sigma2),'DisplayName','Temperature')
+hold on
+plot(squeeze(sigma22),'DisplayName','Salinity');
+title('Std. Dev. of Temperature and Salinity vs Depth (Oct-Dec)')
+xlabel('Depth');
+ylabel('Standard Deviation');
+xticks(1:20);
+xticklabels(depth);
+legend;
