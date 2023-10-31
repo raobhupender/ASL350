@@ -63,17 +63,24 @@ end
 season11 = [season11,t/24];
 season22 = [season22,t1/24];
 
-season = {'1871', '1881','1891','1901','1911','1921','1931','1941','1951','1961','1971','1981','1991','2001','2010'};
-values2 = [season2(1),season2(11),season2(21),season2(31),season2(41),season2(51),season2(61),season2(71),season2(81),season2(91),season2(101),season2(111),season2(121),season2(131),season2(140)];
-values1 = [season1(1),season1(11),season1(21),season1(31),season1(41),season1(51),season1(61),season1(71),season1(81),season1(91),season1(101),season1(111),season1(121),season1(131),season1(140)];
+% %season = {'1871', '1881','1891','1901','1911','1921','1931','1941','1951','1961','1971','1981','1991','2001','2010'};
+% values2 = [season2(1),season2(11),season2(21),season2(31),season2(41),season2(51),season2(61),season2(71),season2(81),season2(91),season2(101),season2(111),season2(121),season2(131),season2(140)];
+% values1 = [season1(1),season1(11),season1(21),season1(31),season1(41),season1(51),season1(61),season1(71),season1(81),season1(91),season1(101),season1(111),season1(121),season1(131),season1(140)];
+% season= 1:1680;
+value1 = [];
+value2 = [];
+for i=1:140
+    value2=[value2,season2(i)];
+    value1=[value1,season1(i)];
+end
 % Create a grouped bar graph
 bar_width = 0.35;  % Adjust the bar width as needed
-bar_groups = 1:length(season);
+bar_groups = 1:140;
 
 figure;
-bar(bar_groups - bar_width/2, values1, bar_width, 'b', 'DisplayName', 'Feb-April');
+bar(bar_groups - bar_width/2, value1, bar_width, 'b', 'DisplayName', 'Feb-April');
 hold on;
-bar(bar_groups + bar_width/2, values2, bar_width, 'g', 'DisplayName', 'Oct-Dec');
+bar(bar_groups + bar_width/2, value2, bar_width, 'g', 'DisplayName', 'Oct-Dec');
 hold off;
 
 % Customize the chart
