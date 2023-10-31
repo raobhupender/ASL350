@@ -1,0 +1,26 @@
+% (e)
+figure;
+for k=0:13
+    sals=[];
+    temps=[];
+    for i=1:20
+        a=0;
+        b=0;
+        for j=1:12
+            a=a+sal(4,4,i,j+k*120);
+            b=b+temp(4,4,i,j+k*120);
+        end
+        a=a/12;
+        b=b/12;
+        sals = [sals,a]; %#ok<*AGROW>
+        temps = [temps,b];
+    end
+    year=1871+10*k;
+    plot(squeeze(sals),squeeze(temps),'DisplayName',string(year));
+    hold on;
+end
+xlabel("Salinty")
+ylabel("Temperature")
+title("T/S Diagram")
+lgd=legend;
+lgd.NumColumns=2;
