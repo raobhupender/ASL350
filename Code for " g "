@@ -1,0 +1,121 @@
+temp = ncread('SODA_TEMP.nc','TEMP');
+sal = ncread('SODA_SAL.nc','SALT');
+depth = ncread('SODA_TEMP.nc','LEV1_20');
+
+depth_str = arrayfun(@num2str, depth, 'UniformOutput', false);
+years = 1871:2010;
+
+figure; 
+for h = 1:20
+    temper = [];
+    intann_T = 0;
+    for i = 1:1680
+        value_T = 0;
+        value_S = 0;
+        if rem(i,12)==1 && i~=1
+            temper = [temper,intann_T/(96)];
+            intann_T = 0;
+        end
+        for j = 1:8
+            value_T = value_T + mean(temp(:,j,h,i));
+        end
+        intann_T = intann_T + value_T;
+    end
+    temper = [temper,intann_T/(96)];
+    plot(years,temper,'-o');
+    title('Plot of Variation of Interannual Temperature for 140 years');
+    xlabel('Year');
+    ylabel('Temperature (°C)');
+    hold on;
+end
+legend(depth_str);
+hold off;
+
+figure; %Variation of Salinity with depth
+for h = 1:20
+    salint = [];
+    intann_S = 0;
+    for i = 1:1680
+        value_S = 0;
+        if rem(i,12)==1 && i~=1
+            salint = [salint,intann_S/(96)];
+            intann_S = 0;
+        end
+        for j = 1:8         
+            value_S = value_S + mean(sal(:,j,h,i));
+        end
+        intann_S = intann_S + value_S;
+    end
+    salint = [salint,intann_S/(96)];
+    plot(years,salint,'-o');
+    title('Plot of Variation of Interannual Salinity for 140 years');
+    xlabel('Year');
+    ylabel('Salinity (g/L)');
+    hold on;
+end
+hold off;
+legend(depth_str);
+
+
+
+temper = [];
+salint = [];
+intann_T = 0;
+intann_S = 0;
+for i = 1:1680
+    value_T = 0;
+    value_S = 0;
+    if rem(i,12)==1 && i~=1
+        temper = [temper,intann_T/(96)];
+        intann_T = 0;
+        salint = [salint,intann_S/(96)];
+        intann_S = 0;
+    end
+    for j = 1:8
+        value_T = value_T + mean(temp(:,j,1,i));
+        value_S = value_S + mean(sal(:,j,1,i));
+    end
+    intann_T = intann_T + value_T;
+    intann_S = intann_S + value_S;
+end
+
+temper = [temper,intann_T/(96)];
+salint = [salint,intann_S/(96)];
+
+
+
+% Perform linear regression
+degree = 1; % for linear regression
+coefficients = polyfit(years,temper,degree);
+
+% Get the fitted values
+y_fit = polyval(coefficients, years);
+
+figure;
+% Plot the original data and the regression line for Temperature
+plot(years, temper,'-o');
+hold on;
+plot(years, y_fit, 'r-', 'DisplayName', 'Linear Regression');
+xlabel('Years');
+ylabel('Temperature (°C)');
+fprintf('Linear Regression Coefficients: y = %.4fx + %.4f\n', coefficients(1), coefficients(2));
+title('Linear Regression of Interannual Temperature');
+hold off;
+
+% Perform linear regression
+degree = 1; % for linear regression
+coefficients = polyfit(years,salint,degree);
+
+% Get the fitted values
+y_fit = polyval(coefficients, years);
+
+figure;
+% Plot the original data and the regression line for Salinity
+plot(years, salint,'-o');
+hold on;
+plot(years, y_fit, 'r-', 'DisplayName', 'Linear Regression');
+xlabel('Years');
+ylabel('Salinity (g/L)');
+fprintf('Linear Regression Coefficients: y = %.4fx + %.4f\n', coefficients(1), coefficients(2));
+title('Linear Regression of Interannual Salinity');
+hold off;
